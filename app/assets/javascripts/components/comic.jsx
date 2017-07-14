@@ -4,18 +4,75 @@ class Comic extends React.Component {
     size: React.PropTypes.string
   };
 
+  state = { upvoted: this.props.data.upvoted };
+
+  componentDidMount() {
+    var comp = this;
+
+    // Hover the overlay (or show if upvoted)
+    var thisObject = $("#comic_" + comp.props.data.id);
+    if (comp.state.upvoted) {
+      thisObject.find(".overlay").show();
+    } else {
+      thisObject.hover(function(e) {
+        thisObject.find(".overlay").show();
+      }, function(e) {
+        thisObject.find(".overlay").hide();
+      });
+    }
+    
+    // Hover the hearts
+    thisObject.find(".heart").hover(function(e) {
+      $(e.target).addClass("heart-hover");
+      $(e.target).removeClass("heart-off");
+      $(e.target).removeClass("heart-on");
+    }, function(e) {
+      $(e.target).removeClass("heart-hover");
+      if (comp.state.upvoted) {
+        $(e.target).addClass("heart-on");
+      } else {
+        $(e.target).addClass("heart-off");
+      }
+    });
+  }
+
+  getHeartClass() {
+    if (this.state.upvoted) {
+      return "heart-on";
+    }
+    return "heart-off";
+  }
+
   renderThumbnail() {
     var thumb = this.props.data.thumbnail
     var url = thumb.path + "/" + this.props.size + "." + thumb.extension;
-    return <img className="circle" src={url} />;
+    return <img src={url} />;
   }
 
-  renderTitle() {
-    return ;
+  renderYear() {
+    var year;
+    for (var i=0; i<this.props.data.dates.length; i++) {
+      year = moment(this.props.data.dates[i].date, moment.ISO_8601).format('YYYY');
+      if (year <= moment().year()) {
+        break;
+      }
+    }
+    if (!year) {
+      return null;
+    }
+    return <div className="year">{year}</div>;
   }
 
   render() {
-    return <div className="comic">
+    return <div className="comic" id={"comic_" + this.props.data.id}>
+      <div className="overlay">
+        <div className={"heart " + this.getHeartClass()}></div>
+        <div className="title">{this.props.data.title}</div>
+        <div className="notes">
+          <div className="issue-number">#{this.props.data.issueNumber}</div>
+          {this.renderYear()}
+        </div>
+      </div>
       {this.renderThumbnail()}
     </div>;
   }

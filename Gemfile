@@ -46,6 +46,9 @@ gem 'js-routes', '~> 1.3.2'
 # Better templating
 gem 'slim'
 
+# Dates
+gem 'momentjs-rails'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

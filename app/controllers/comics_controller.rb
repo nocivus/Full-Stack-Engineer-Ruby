@@ -6,7 +6,11 @@ class ComicsController < ApplicationController
   def index
     sanitize_pagination_params
 
-    render json: ComicsService.get_comics(params[:page], params[:per_page])
+    # $data = ComicsService.get_comics(params[:page], params[:per_page])
+
+    $data[:data][0]["upvoted"] = true
+
+    render json: $data
   end
 
   private

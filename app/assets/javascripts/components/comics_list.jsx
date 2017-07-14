@@ -32,7 +32,7 @@ class ComicsList extends React.Component {
     
     var comics = [];
     data.map(function(item, index) {
-      comics.push(<Comic key={index} data={item} size="portrait_fantastic" />);
+      comics.push(<Comic key={index} data={item} size="portrait_xlarge" />);
     });
     return comics;
   }

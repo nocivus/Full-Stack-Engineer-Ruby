@@ -17,49 +17,131 @@
 $background-color: rgb(43, 43, 43);
 $header-color: rgba(255, 0, 0, .9);
 
+$overlay-border-color: rgba(255, 0, 0, .9);
+$overlay-background-color: rgba(0, 0, 0, .7);
+
 body {
   background-color: $background-color;
   margin: 0;
+  text-align: center;
+  font-family: verdana, arial;
+  font-size: 10pt;
 }
 
-.header {
-  background-color: $header-color;
-  position: fixed;
-  top: 0;
-  text-align: center;
+.container {
   width: 100%;
-  height: 130px;
+  text-align: center;
+  border: 1px solid white;
 
-  .logo {
-    margin-top: 1em;
-    margin-bottom: .5em;
+  .header {
+    background-color: $header-color;
+    position: fixed;
+    top: 0;
+    text-align: center;
+    width: 100%;
+    height: 130px;
+    z-index: 100;
+
+    .logo {
+      margin-top: 1em;
+      margin-bottom: .5em;
+    }
+
+    .search-bar {
+      width: 20em;
+      padding: 5px;
+      font-style: italic;
+    }
   }
 
-  .search-bar {
-    width: 20em;
-    padding: 5px;
-    font-style: italic;
+  .comics-list {
+    max-width: 960px;
+    margin-top: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+    .collection {
+      display: grid;
+      grid-gap: 10px;
+      grid-template-columns: repeat(5, auto);
+      grid-template-rows: repeat(3, auto);
+
+      .comic {
+        position: relative;
+        width: 150px;
+        height: 225px;
+        align-self: center;
+        justify-self: center;
+        cursor: pointer;
+
+        .overlay {
+          display: none;
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          width: 140px;
+          height: 215px;
+          color: #FFF;
+          border: 7px solid $overlay-border-color;
+          background-color: $overlay-background-color;
+          text-align: left;
+
+          .heart-hover, .heart-on, .heart-off {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            width: 30px;
+            height: 27px;
+          }
+
+          .heart-hover {
+            background: url(heart_hover.png);
+          }
+          .heart-on {
+            background: url(heart_on.png);
+          }
+          .heart-off {
+            background: url(heart_off.png);
+           }
+
+          .title {
+            position: absolute;
+            left: 5px;
+            bottom: 30px;
+            text-transform: uppercase;
+          }
+
+          .notes {
+            position: absolute;
+            left: -2px;
+            bottom: 5px;
+            height: 15px;
+
+            .issue-number, .year {
+              padding: 2px;
+              padding-left: 4px;
+              padding-right: 4px;
+            }
+
+            .issue-number {
+              font-size: 8pt;
+              background-color: $overlay-border-color;
+              display: inline-block;
+            }
+
+            .year {
+              font-size: 7pt;
+              background-color: $background-color;
+              display: inline-block;
+            }
+          }          
+        }
+      }
+    }
   }
 }
 
 .centered {
   text-align: center;
-}
-
-.comic {
-  justify-content: stretch; 
-}
-
-.comics-list {
-  width: 100%;
-  text-align: center;
-  border: 1px solid black;
-
-  .collection {
-    width: 100%;
-    border: 1px solid black;
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(5, auto);
-  }
 }

@@ -23,3 +23,5 @@
 
 // Rails routes in js
 //= require js-routes
+
+//= require moment
