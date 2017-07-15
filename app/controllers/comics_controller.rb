@@ -6,7 +6,17 @@ class ComicsController < ApplicationController
   def index
     sanitize_pagination_params
 
-    # $data = ComicsService.get_comics(params[:page], params[:per_page])
+    # Parse search characters
+    if params[:search_query]
+      chars = []
+      params[:search_query].split(',').each do |char|
+        chars << char.strip
+      end
+      char_ids = ComicsService.find_char_ids(chars)
+      puts char_ids
+    end
+
+    $data = ComicsService.get_comics(params[:page], params[:per_page], char_ids ? char_ids.join(',') : nil)
 
     $data[:data][0]["upvoted"] = true
 

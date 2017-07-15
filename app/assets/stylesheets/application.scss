@@ -20,6 +20,10 @@ $header-color: rgba(255, 0, 0, .9);
 $overlay-border-color: rgba(255, 0, 0, .9);
 $overlay-background-color: rgba(0, 0, 0, .7);
 
+$pagination-background-color: white;
+$pagination-disabled-background-color: rgb(86, 86, 86);
+$pagination-disabled-color: rgb(150, 150, 150);
+
 body {
   background-color: $background-color;
   margin: 0;
@@ -31,7 +35,6 @@ body {
 .container {
   width: 100%;
   text-align: center;
-  border: 1px solid white;
 
   .header {
     background-color: $header-color;
@@ -60,6 +63,52 @@ body {
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+
+    .loading {
+      width: 576px;
+      height: 576px;
+    }
+
+    .pagination {
+      display: grid;
+      grid-template-columns: repeat(9, auto);
+      grid-template-rows: repeat(1, auto);
+      /*position: fixed;
+      bottom: 0px;
+      left: 0px;*/
+      width: 100%;
+      margin-top: 3em;
+      margin-bottom: 2em;
+
+      a {
+        align-self: center;
+        justify-self: center;
+        background-color: $pagination-background-color;
+        color: $overlay-border-color;
+        text-decoration: none;
+        padding: 5px;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 120%;
+      }
+
+      .active {
+        a {
+          background-color: $overlay-border-color;
+          color: $pagination-background-color;
+          padding: 10px;
+          font-size: 140%;
+        }
+      }
+
+      .disabled {
+        a {
+          background-color: $pagination-disabled-background-color;
+          color: $pagination-disabled-color;
+          cursor: default;
+        }
+      }
+    }
 
     .collection {
       display: grid;

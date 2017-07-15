@@ -1,7 +1,9 @@
 class LoadingBar extends React.Component {
+  static propTypes = {
+    loadingImage: React.PropTypes.string
+  };
+
   render() {
-    return <div className="progress">
-      <div className="indeterminate"></div>
-    </div>
+    return <img className="loading" src={this.props.loadingImage} />;
   }
 }

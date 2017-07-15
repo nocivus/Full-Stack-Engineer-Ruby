@@ -26,7 +26,7 @@ class PaginatorSection extends React.Component {
     if (disabled) {
       className = "disabled";
     }
-    return <li key={index} className={className}>
+    return <div key={index} className={className}>
             {
               className == "disabled" ? (
                 <PaginatorLink text={text} pageNumber={page} />
@@ -34,7 +34,7 @@ class PaginatorSection extends React.Component {
                 <PaginatorLink text={text} pageNumber={page} onPaginatorLinkClick={this._handleOnClick.bind(this)} />
               )
             }
-           </li>;
+           </div>;
   }
 
   generateLinks(page, perPage, totalPages, maxLinks) {
@@ -43,7 +43,7 @@ class PaginatorSection extends React.Component {
 
     links.push(this.paginationLink(index, "First", 1, perPage, page == 1));
     index++;
-    links.push(this.paginationLink(index, "<", page - 1, perPage, page == 1));
+    links.push(this.paginationLink(index, "Previous", page - 1, perPage, page == 1));
     index++;
 
     startPage = page < maxLinks ? 1 : page - Math.ceil(maxLinks / 2);
@@ -55,7 +55,7 @@ class PaginatorSection extends React.Component {
       }
     }
 
-    links.push(this.paginationLink(index, ">", page + 1, perPage, page >= totalPages));
+    links.push(this.paginationLink(index, "Next", page + 1, perPage, page >= totalPages));
     index++;
     links.push(this.paginationLink(index, "Last", totalPages, perPage, page >= totalPages));
     index++;
@@ -69,12 +69,12 @@ class PaginatorSection extends React.Component {
     if (comp.props.totalPages > 1) {
      return (
         // Render the links list
-        <ul className="pagination flow-text">
+        <div className="pagination">
           {comp.generateLinks(comp.props.currentPage, comp.props.perPage, comp.props.totalPages, 5)}
-        </ul>
+        </div>
       );
     } else {
-      return <div>&nbsp;</div>
+      return <div className="pagination">&nbsp;</div>
     }
   }
 }

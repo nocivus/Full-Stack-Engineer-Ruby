@@ -1,5 +1,7 @@
 class ComicsList extends React.Component {
-  static propTypes = {};
+  static propTypes = {
+    loadingImage: React.PropTypes.string
+  };
 
   state = { page: 1, loading: false };
 
@@ -9,27 +11,41 @@ class ComicsList extends React.Component {
 
   loadData() {
     var comp = this;
-    comp.setState({ page: comp.state.page, loading: true });
-    $.post({
-      url: Routes.comics_path(),
-      type: "GET",
-      data: { page: comp.state.page, per_page: 15 },
-      success: function(data) {
-        console.log(data);
-        comp.setState({ page: data.metadata.page, results: data, loading: false });
+    comp.setState({ page: comp.state.page, loading: true }, function() {
+
+      var params = { page: comp.state.page, per_page: 15 };
+      if (comp.state.searchQuery) {
+        params.search_query = comp.state.searchQuery;
       }
+
+      $.post({
+        url: Routes.comics_path(),
+        type: "GET",
+        data: params,
+        success: function(data) {
+          console.log(data);
+          comp.setState({ page: data.metadata.page, results: data, loading: false });
+        }
+      });
     });
   }
 
   _handleOnPaginate(pageNumber) {
+    var comp = this;
     // Changes  the state pageNumber value and call
-    this.setState({ page: pageNumber, results: null }, function() {
-      this.loadData();
+    comp.setState({ page: pageNumber, results: null }, function() {
+      comp.loadData();
+    });
+  }
+
+  onSearchPerformed(searchQuery) {
+    var comp = this;
+    comp.setState({ searchQuery: searchQuery }, function() {
+      comp.loadData();
     });
   }
 
   renderComics(data) {
-    
     var comics = [];
     data.map(function(item, index) {
       comics.push(<Comic key={index} data={item} size="portrait_xlarge" />);
@@ -39,7 +55,7 @@ class ComicsList extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return <LoadingBar />;
+      return <div className="comics-list"><LoadingBar loadingImage={this.props.loadingImage} /></div>;
     }
     if (!this.state.results) {
       return <div className="comics-list">No results.</div>;
