@@ -8,19 +8,10 @@ class Comic extends React.Component {
 
   componentDidMount() {
     var comp = this;
-
-    // Hover the overlay (or show if upvoted)
     var thisObject = $("#comic_" + comp.props.data.id);
-    if (comp.state.upvoted) {
-      thisObject.find(".overlay").show();
-    } else {
-      thisObject.hover(function(e) {
-        thisObject.find(".overlay").show();
-      }, function(e) {
-        thisObject.find(".overlay").hide();
-      });
-    }
-    
+ 
+    this.setupOverlay();
+
     // Hover the hearts
     thisObject.find(".heart").hover(function(e) {
       $(e.target).addClass("heart-hover");
@@ -34,6 +25,50 @@ class Comic extends React.Component {
         $(e.target).addClass("heart-off");
       }
     });
+
+    // Clicking the heart up or downvotes
+    thisObject.find(".heart").click(function(e) {
+      if (comp.state.upvoted) {
+        comp.updownvote(false, comp.props.data.id);
+      } else {
+        comp.updownvote(true, comp.props.data.id);
+      }
+    });
+  }
+
+  updownvote(upvote, id) {
+    var comp = this;
+    var url = upvote == true ? Routes.upvote_path(id) : Routes.downvote_path(id);
+    $.post({
+      url: url,
+      type: "POST",
+      success: function(data) {
+        if (data.result == "success") {
+          comp.setState({ upvoted: upvote });
+        }
+      }
+    });
+  }
+
+  componentDidUpdate() {
+    this.setupOverlay();
+  }
+
+  setupOverlay() {
+    var comp = this;
+    var thisObject = $("#comic_" + comp.props.data.id);
+
+    // Hover the overlay if not upvoted, otherwise show
+    if (comp.state.upvoted) {
+      thisObject.find(".overlay").show();
+      thisObject.unbind("mouseenter mouseleave");
+    } else {
+      thisObject.hover(function(e) {
+        thisObject.find(".overlay").show();
+      }, function(e) {
+        thisObject.find(".overlay").hide();
+      });
+    }
   }
 
   getHeartClass() {

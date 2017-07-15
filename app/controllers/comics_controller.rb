@@ -13,14 +13,32 @@ class ComicsController < ApplicationController
         chars << char.strip
       end
       char_ids = ComicsService.find_char_ids(chars)
-      puts char_ids
     end
 
-    $data = ComicsService.get_comics(params[:page], params[:per_page], char_ids ? char_ids.join(',') : nil)
+    result = ComicsService.get_comics(params[:page], params[:per_page], char_ids ? char_ids.join(',') : nil)
 
-    $data[:data][0]["upvoted"] = true
+    # Go through the results and check for upvotes (updating data as needed)
+    result[:data].each do |comic|
+      comic[:upvoted] = Upvote.upvoted?(comic["id"])
+    end
 
-    render json: $data
+    render json: result
+  end
+
+  def upvote
+    Upvote.upvote(params[:id])
+
+    # TODO: error handling
+
+    render json: { result: "success" }
+  end
+
+  def downvote
+    Upvote.downvote(params[:id])
+
+    # TODO: error handling
+
+    render json: { result: "success" }
   end
 
   private

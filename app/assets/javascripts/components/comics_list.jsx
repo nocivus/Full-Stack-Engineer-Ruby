@@ -18,9 +18,8 @@ class ComicsList extends React.Component {
         params.search_query = comp.state.searchQuery;
       }
 
-      $.post({
+      $.get({
         url: Routes.comics_path(),
-        type: "GET",
         data: params,
         success: function(data) {
           console.log(data);
